@@ -1,0 +1,33 @@
+### Create list students request
+POST http://localhost:8080/students
+Content-Type: application/json
+
+[
+  {
+    "reference": "STU001",
+    "firstName": "Alice",
+    "lastName": "Durand",
+    "age": 20
+  },
+  {
+    "reference": "STU002",
+    "firstName": "Bob",
+    "lastName": "Martin",
+    "age": 22
+  },
+  {
+    "reference": "STU003",
+    "firstName": "Charlie",
+    "lastName": "Dupont",
+    "age": 19
+  }
+]
+
+### Test GET /students avec Accept : text/plain
+GET http://localhost:8080/students
+Accept: text/plain
+
+### Test GET /students avec Accept : application/json (retourne ERROR)
+GET http://localhost:8080/students
+Accept: application/json
+
