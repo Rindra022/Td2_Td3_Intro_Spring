@@ -21,6 +21,10 @@ public class StudentService {
                 .toList();
     }
 
+    public List<StudentEntity> getAllStudents() {
+        return studentRepository.findAll();
+    }
+
     public void createStudents(List<StudentEntity> students) {
         studentRepository.save(students);
     }

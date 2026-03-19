@@ -22,14 +22,35 @@ public class StudentController {
         }else {
             return "Format not supported ";
         }
+
+        if(!accept.equals("text/plain") && !accept.equals("application/json")){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_IMPLEMENTED)
+                    .body("Accept header not valid");
+        }
+
+        try {
+            List<StudentEntity> students = studentService.getAllStudents();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(students);
+
+        }catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error" + e.getMessage());
+        }
+
     }
 
 
     @PostMapping
-    public List<String> createStudents(@RequestBody List<StudentEntity> students) {
+    public ResponseEntity<List<StudentEntity>> createStudents(@RequestBody List<StudentEntity> students) {
         studentService.createStudents(students);
 
-        return studentService.getAllStudentsFullName();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(students);
     }
 }
 
