@@ -8,6 +8,13 @@ public class StudentEntity {
 
     public StudentEntity(){}
 
+    public StudentEntity(String reference, String firstName, String lastName, Integer age) {
+        this.reference = reference;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+    }
+
     public String getReference() {
         return reference;
     }
