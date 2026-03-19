@@ -20,25 +20,40 @@ public class StudentController {
 
     @GetMapping
     public ResponseEntity<?> getAllStudents(@RequestHeader("Accept") String accept) {
-        if(accept.equals("text/plain")){
-            String allNames = String.join("\n", studentService.getAllStudentsFullName());
-            return ResponseEntity.ok()
-                    .contentType(MediaType.TEXT_PLAIN)
-                    .body(allNames);
-        }else {
+        if(accept == null || accept.isEmpty()){
             return ResponseEntity
-                    .status(HttpStatus.NOT_ACCEPTABLE)
-                    .body("Format not supported ");
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Accept header is empty");
         }
+
+        if(!accept.equals("text/plain") && !accept.equals("application/json")){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_IMPLEMENTED)
+                    .body("Accept header not valid");
+        }
+
+        try {
+            List<StudentEntity> students = studentService.getAllStudents();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(students);
+
+        }catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error" + e.getMessage());
+        }
+
     }
 
 
     @PostMapping
-    public ResponseEntity<List<String>> createStudents(@RequestBody List<StudentEntity> students) {
+    public ResponseEntity<List<StudentEntity>> createStudents(@RequestBody List<StudentEntity> students) {
         studentService.createStudents(students);
 
         return ResponseEntity
-                .ok(studentService.getAllStudentsFullName());
+                .status(HttpStatus.CREATED)
+                .body(students);
     }
 }
 
