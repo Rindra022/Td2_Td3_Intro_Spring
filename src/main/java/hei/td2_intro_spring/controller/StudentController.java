@@ -2,6 +2,8 @@ package hei.td2_intro_spring.controller;
 
 import hei.td2_intro_spring.entity.StudentEntity;
 import hei.td2_intro_spring.service.StudentService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,11 +18,11 @@ public class StudentController {
     }
 
     @GetMapping
-    public String getAllStudents(@RequestHeader("Accept") String accept) {
-        if(accept.equals("text/plain")){
-            return String.join("\n", studentService.getAllStudentsFullName());
-        }else {
-            return "Format not supported ";
+    public ResponseEntity<?> getAllStudents(@RequestHeader("Accept") String accept) {
+        if(accept == null || accept.isEmpty()){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Accept header is empty");
         }
 
         if(!accept.equals("text/plain") && !accept.equals("application/json")){
