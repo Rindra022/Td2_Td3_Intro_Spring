@@ -23,4 +23,11 @@ Content-Type: application/json
   }
 ]
 
-###
+### Test GET /students avec Accept : text/plain
+GET http://localhost:8080/students
+Accept: text/plain
+
+### Test GET /students avec Accept : application/json (retourne ERROR)
+GET http://localhost:8080/students
+Accept: application/json
+
