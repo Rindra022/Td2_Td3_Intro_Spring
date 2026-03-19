@@ -15,8 +15,10 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public List<StudentEntity> getAllStudents() {
-        return studentRepository.findAll();
+    public List<String> getAllStudentsFullName() {
+        return studentRepository.findAll().stream()
+                .map(s -> s.getFirstName() + " " + s.getLastName())
+                .toList();
     }
 
     public void createStudents(List<StudentEntity> students) {

@@ -22,10 +22,7 @@ public class StudentController {
         studentService.createStudents(students);
 
         return ResponseEntity
-                .ok(studentService.getAllStudents().stream()
-                .map(s -> s.getFirstName() + " " + s.getLastName())
-                .toList());
-
+                .ok(studentService.getAllStudentsFullName());
     }
 }
 
