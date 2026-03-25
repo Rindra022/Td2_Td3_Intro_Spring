@@ -19,11 +19,6 @@ public class StudentService {
         this.studentValidator = studentValidator;
     }
 
-    public List<String> getAllStudentsFullName() {
-        return studentRepository.findAll().stream()
-                .map(s -> s.getFirstName() + " " + s.getLastName())
-                .toList();
-    }
 
     public List<StudentEntity> getAllStudents() {
         return studentRepository.findAll();
