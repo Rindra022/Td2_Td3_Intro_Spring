@@ -1,6 +1,7 @@
 package hei.td2_intro_spring.controller;
 
 import hei.td2_intro_spring.entity.StudentEntity;
+import hei.td2_intro_spring.exception.BadRequestException;
 import hei.td2_intro_spring.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +28,17 @@ public class StudentController {
 
         if(!accept.equals("text/plain") && !accept.equals("application/json")){
             return ResponseEntity
-                    .status(HttpStatus.NOT_IMPLEMENTED)
-                    .body("Accept header not valid");
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Accept header not supported");
         }
 
         try {
             List<StudentEntity> students = studentService.getAllStudents();
+
+            if(accept.equals("text/plain")){
+                return ResponseEntity.ok(studentService.getAllStudentsAsText());
+            }
+
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(students);
@@ -47,12 +53,23 @@ public class StudentController {
 
 
     @PostMapping
-    public ResponseEntity<List<StudentEntity>> createStudents(@RequestBody List<StudentEntity> students) {
-        studentService.createStudents(students);
+    public ResponseEntity<?> createStudents(@RequestBody List<StudentEntity> students) {
+            try {
+                studentService.createStudents(students);
+                return ResponseEntity
+                        .status(HttpStatus.CREATED)
+                        .header("Content-Type", "application/json")
+                        .body(studentService.getAllStudents());
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(students);
+            } catch (BadRequestException e) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(e.getMessage());
+            }
+
+
+
+
     }
 }
 
